@@ -1,4 +1,6 @@
 <script>
+    import { onMount } from "svelte";
+  
     let videoElement;
     let canvasElement;
     let file;
@@ -19,14 +21,10 @@
       const context = canvasElement.getContext('2d');
       context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
   
-      // 画像をデータURLとして取得
       previewUrl = canvasElement.toDataURL('image/png');
   
-      // データURLをBlobに変換
       canvasElement.toBlob((blob) => {
         file = new File([blob], "captured_image.png", { type: "image/png" });
-  
-        // 画像を撮影したらすぐにアップロードする
         uploadFile();
       }, "image/png");
     }
@@ -57,30 +55,31 @@
       }
     }
   
-    async function handleEnterKey(event) {
+    function handleEnterKey(event) {
       if (event.key === "Enter") {
-        event.preventDefault(); // フォームなどのデフォルト動作を防ぐ
-        await startCamera(); // カメラ起動
-        setTimeout(captureImage, 2000); // 2秒後に撮影（カメラが起動するのを待つ）
+        event.preventDefault();
+        startCamera().then(() => {
+          setTimeout(captureImage, 2000);
+        });
       }
     }
   
-    // キーボードイベントを登録
-    window.addEventListener("keydown", handleEnterKey);
+    onMount(() => {
+      window.addEventListener("keydown", handleEnterKey);
+    });
   </script>
   
   <h1>Welcome to SvelteKit</h1>
   <p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
   
-  <!-- カメラ映像を表示する -->
-  <video bind:this={videoElement} autoplay playsinline></video>
+  <video bind:this={videoElement} autoplay playsinline>
+    <track kind="captions" src="" srclang="en" label="No captions available" />
+  </video>
   
-  <!-- 撮影した画像を表示 -->
   {#if previewUrl}
-    <img src={previewUrl} alt="Captured Image" width="200" />
+    <img src={previewUrl} alt="撮影した画像" width="200" />
   {/if}
   
-  <!-- 画像を保存するためのcanvas -->
   <canvas bind:this={canvasElement} width="640" height="480" style="display: none;"></canvas>
   
   <p>Enterキーを押すとカメラ起動 → 撮影 → アップロードが実行されます</p>
