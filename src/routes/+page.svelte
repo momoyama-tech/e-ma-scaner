@@ -117,24 +117,154 @@
         window.addEventListener("keydown", handleEnterKey);
     });
 </script>
-  
-<h1>カメラ切り替え付き版</h1>
-  
+
+<style>
+  body {
+    background-color: #FFF4E6; /* 優しい肌色の背景 */
+    color: #333;
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* 可愛らしいフォント */
+    margin: 0;
+    padding: 0;
+  }
+
+  .header {
+    text-align: center;
+    padding: 20px;
+    background-color: #FFB6C1; /* ピンク色の背景 */
+    color: white;
+    font-size: 36px;
+    font-weight: bold;
+    border-bottom: 4px solid #FF69B4; /* 濃いピンクのボーダー */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .description {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 18px;
+    color: #555;
+  }
+
+  .button-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .button-container button {
+    background-color: #FF69B4; /* 濃いピンクのボタン */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 30px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .button-container button:hover {
+    background-color: #FF1493; /* ダークピンク */
+  }
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between; /* 要素間のスペースを均等に */
+    gap: 20px;
+    padding: 20px;
+    text-align: center;
+    max-width: 1200px; /* 最大幅を設定 */
+    margin: 0 auto; /* 中央揃え */
+  }
+
+  .section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #FF69B4; /* 濃いピンクの枠線 */
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+
+  .section h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #FF69B4;
+  }
+
+  video, .image-placeholder {
+    border: 2px solid #FF69B4; /* 濃いピンクの枠線 */
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* 横幅を親要素に合わせる */
+    max-width: 600px; /* 最大幅を設定 */
+    height: auto;
+    aspect-ratio: 4 / 3; /* アスペクト比を固定 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9; /* 背景色を追加 */
+  }
+
+  .image-placeholder img {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+  }
+
+  canvas {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+
+    .section {
+      width: 100%;
+    }
+
+    video, .image-placeholder {
+      max-width: 100%; /* モバイルでは幅を100%に */
+    }
+  }
+</style>
+
+<div class="header">E-ma お絵描き撮影</div>
 <p>カメラ選択:</p>
 <select on:change={handleDeviceChange} bind:value={selectedDeviceId}>
     {#each devices as device}
       <option value={device.deviceId}>{device.label || `カメラ ${device.deviceId}`}</option>
     {/each}
 </select>
-  
-<video bind:this={videoElement} autoplay playsinline width="640" height="480">
-    <track kind="captions" src="" srclang="en" label="No captions available" />
-</video>
-  
-{#if previewUrl}
-    <img src={previewUrl} alt="撮影した画像" width="400" />
-{/if}
-  
+<div class="description">
+  <p>撮影ボタンを押して、カメラでお絵描きを撮影しましょう！</p>
+</div>
+
+<div class="container">
+  <!-- カメラセクション -->
+  <div class="section">
+    <h2>カメラ</h2>
+    <p>カメラを使用して画像を撮影します。</p>
+    <video bind:this={videoElement} autoplay playsinline width="640" height="480">
+        <track kind="captions" src="" srclang="en" label="No captions available" />
+    </video>
+  </div>
+
+  <!-- 撮影した写真セクション -->
+  <div class="section">
+    <h2>撮影した写真</h2>
+    <p>撮影した画像がここに表示されます。</p>
+    <div class="image-placeholder">
+        {#if previewUrl}
+            <img src={previewUrl} alt="撮影した画像" width="400" />
+        {/if}
+    </div>
+  </div>
+</div>
+
 <canvas bind:this={canvasElement} width="1920" height="1080" style="display: none;"></canvas>
-  
-<p>Enterキーを押すと現在選択中のカメラから撮影（ピンク枠だけ切り取り）→ アップロードします</p>
