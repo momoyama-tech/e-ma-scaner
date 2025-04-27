@@ -47,10 +47,10 @@
         context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
   
         // 🔥ここから追記：ピンク枠だけ切り取る処理
-        const cropX = 300;   // ← 必要なら調整して
-        const cropY = 80;   // ← 必要なら調整して
-        const cropWidth = 1000;  // ← 必要なら調整して
-        const cropHeight = 950;  // ← 必要なら調整して
+        const cropX = 390;   // ← 必要なら調整して
+        const cropY = 75;   // ← 必要なら調整して
+        const cropWidth = 900;  // ← 必要なら調整して
+        const cropHeight = 1000;  // ← 必要なら調整して
 
         const croppedCanvas = document.createElement('canvas');
         croppedCanvas.width = cropWidth;
@@ -90,7 +90,7 @@
             const responseJson = await res.json();
   
             if (res.ok) {
-                alert('アップロード成功');
+                // alert('アップロード成功');
             } else {
                 alert(`アップロード失敗: ${responseJson.error || '不明なエラー'}`);
             }
