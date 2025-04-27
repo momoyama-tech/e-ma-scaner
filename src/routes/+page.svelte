@@ -50,7 +50,7 @@
         const cropX = 390;   // ← 必要なら調整して
         const cropY = 75;   // ← 必要なら調整して
         const cropWidth = 900;  // ← 必要なら調整して
-        const cropHeight = 1000;  // ← 必要なら調整して
+        const cropHeight = 985;  // ← 必要なら調整して
 
         const croppedCanvas = document.createElement('canvas');
         croppedCanvas.width = cropWidth;
