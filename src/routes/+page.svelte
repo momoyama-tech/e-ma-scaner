@@ -90,7 +90,7 @@
             const responseJson = await res.json();
   
             if (res.ok) {
-                // alert('アップロード成功');
+                alert('アップロード成功');
             } else {
                 alert(`アップロード失敗: ${responseJson.error || '不明なエラー'}`);
             }
